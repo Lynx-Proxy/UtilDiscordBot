@@ -51,7 +51,7 @@ module.exports = (bot,commandinfo) => {
         MaxArgs = null,
         permissions = [],
         RequiredRoles = [],
-        cback   //Callback
+        callback   
     } = commandinfo
 
     if(typeof commands === 'string'){
@@ -69,11 +69,11 @@ module.exports = (bot,commandinfo) => {
     bot.on('message',(message) => {
         const { content,member,guild } = message //gets the content,member,guild attribute from message
 
-        for(const aliases of commands){
+        for(const alias of commands){
 
-            if(content.toLowerCase().startsWith(`${prefix}${aliases.toLowerCase()}`)){
+            if(content.toLowerCase().startsWith(`${prefix}${alias.toLowerCase()}`)){
                 
-                for(const perms of Permissions){
+                for(const perms of permissions){
                     if(!member.hasPermission(perms)){  //Makes sure user has required permissions
                         message.reply(PermsError)
                         return
@@ -92,13 +92,13 @@ module.exports = (bot,commandinfo) => {
                 }
 
                 const arguments = content.split(/[ ]+/) //splits command into array
-                argument.shift()
+                arguments.shift()
 
                 if(arguments.length < MinArgs || (MaxArgs !== null && arguments.length > MaxArgs)){  //checks if the are to mmany arguments or to little arguments
-                    message.reply(`Wrong syntax, Use ${prefix}${aliases}${ExpectedArgs}`)
+                    message.reply(`Wrong syntax, Use ${prefix}${alias}${ExpectedArgs}`)
                 }
 
-                cback(message,arguments,arguments.join(' '))
+                callback(message,arguments,arguments.join(' '))
 
                 return 
             }
