@@ -11,13 +11,13 @@ bot.on('ready', async () => {
     const commandh = require(`./Commands/${handler}`)
 
     function readcmds(dir){
-        const files = fs.readdirSync(path.join(__dirname,dir))
-        for(const file of files){
-            const Statsync = fs.lstatSync(path.join(__dirname,dir,file))
-            if(Statsync.isDirectory()){
-                readcmds(path.join(__dirname,file))
+        const files = fs.readdirSync(path.join(__dirname, dir))
+        for (const file of files) {
+            const stat = fs.lstatSync(path.join(__dirname, dir, file))
+            if (stat.isDirectory()) {
+                readCommands(path.join(dir, file))
             }
-            else{
+            else if (file !== handler){
                 const options = require(path.join(__dirname,dir,file))
                 commandh(bot,options)
             }
