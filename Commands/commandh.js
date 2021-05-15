@@ -1,4 +1,4 @@
-const { prefix } = '../Config.json'
+const { prefix } = require('../Config.json')
 
 const checkperms = (perms) => {     //function to check permissions
     for (const permission of perms) {
@@ -49,7 +49,7 @@ module.exports = (bot,commandinfo) => {
         PermsError = 'You do not have the permission to run this command',
         MinArgs = 0,
         MaxArgs = null,
-        Permissions = [],
+        permissions = [],
         RequiredRoles = [],
         cback   //Callback
     } = commandinfo
@@ -58,11 +58,11 @@ module.exports = (bot,commandinfo) => {
         commands = [commands]  //converts command into array (for ailiases)
     }
 
-    if(Permissions.length){
-        if(typeof Permissions === 'string'){
-            Permissions = [Permissions] //converts to array for multiple perms
+    if(permissions.length){
+        if(typeof permissions === 'string'){
+            permissions = [permissions] //converts to array for multiple perms
 
-            checkperms(Permissions) //Checks if permission is valid
+            checkperms(permissions) //Checks if permission is valid
         }
     }
 
@@ -75,7 +75,7 @@ module.exports = (bot,commandinfo) => {
                 
                 for(const perms of Permissions){
                     if(!member.hasPermission(perms)){  //Makes sure user has required permissions
-                        message.reply(PermissionError)
+                        message.reply(PermsError)
                         return
                     }
                 }
