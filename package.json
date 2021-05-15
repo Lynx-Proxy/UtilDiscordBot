@@ -1,5 +1,15 @@
 {
   "dependencies": {
     "discord.js": "^12.5.3"
-  }
+  },
+  "name": "util-bot",
+  "version": "1.0.0",
+  "main": "UtilBot.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }
