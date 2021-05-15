@@ -67,6 +67,8 @@ module.exports = (bot,commandinfo) => {
     }
 
     bot.on('message',(message) => {
+        if(message.channel.type = 'dm') return
+        
         const { content,member,guild } = message //gets the content,member,guild attribute from message
 
         for(const alias of commands){
