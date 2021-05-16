@@ -1,6 +1,7 @@
 const { prefix } = require("../Config.json");
+const { MessageEmbed } = require("discord.js")
 
-const checkpermision = (permissions) => {
+const checkpermision = (permissionsss) => {
     const validPermissions = [
       'CREATE_INSTANT_INVITE',
       'KICK_MEMBERS',
@@ -35,12 +36,19 @@ const checkpermision = (permissions) => {
       'MANAGE_EMOJIS',
     ]
 
-    for(const permission of permissions){
-        if(!validPermissions.includes(permission)){
-            throw new Error(`Permission not found ${permission}`);
-        }
-    }
+   for(const perms of permissionsss){
+       if(!validPermissions.includes(perms)){
+           throw new Error(`Permission not found ${perms}`)
+       }
+   }
 }
+
+var today = new Date();
+var dd = String(today.getDate()).padStart(2, '0');
+var mm = String(today.getMonth() + 1).padStart(2, '0'); 
+var yyyy = today.getFullYear();
+
+today = mm + '/' + dd + '/' + yyyy;
 
 module.exports = (bot,argoptions) => {
     let {
@@ -49,7 +57,7 @@ module.exports = (bot,argoptions) => {
         PermissionError = 'You do not have permission to run this command',
         MinArguments = 0, 
         MaxArguments = null,
-        Permissions = [],
+        permissions = [],
         RequiredRoles = [],
         callback
     } = argoptions
@@ -60,9 +68,9 @@ module.exports = (bot,argoptions) => {
 
     console.log(`Loading command:${commands[0]}`)
 
-    if(Permissions.length){
+    if(permissions.length){
         if(typeof Permission === 'string'){
-            Permissions = [Permissions];
+            permissions = [permissions];
         }
     }
 
@@ -71,7 +79,7 @@ module.exports = (bot,argoptions) => {
 
         for(const alias of commands){
             if(content.toLowerCase().startsWith(`${prefix}${alias.toLowerCase()}`)){
-                for(const perms of Permissions){
+                for(const perms of permissions){
                     if(!member.hasPermission(perms)){
                         message.reply(PermissionError);
                         return;
@@ -82,7 +90,10 @@ module.exports = (bot,argoptions) => {
                     const role = guild.roles.cache.find((role) => role.name === reqrole)
 
                     if(!role || member.roles.cache.has(role.id)){
-                        message.reply(`you must have ${reqrole} role to use this commnd`)
+                        var role_embed = new MessageEmbed()
+                        .setTitle(`You need ${reqrole}`)
+                        .setColor("#FF3C38")
+                        message.reply(role_embed)
                         return;
                     }
                 }
@@ -92,7 +103,13 @@ module.exports = (bot,argoptions) => {
                 args.shift();
 
                 if(args.length < MinArguments || MaxArguments !== null && args.length > MaxArguments){
-                    message.reply(`incorrect synatx use:${prefix}${alias}`)
+                    var syntax_embed = new MessageEmbed()
+                    .setTitle("Incorrect Syntax")
+                    .setDescription("Use:\n`" + prefix + alias + ExpectedArguments + "`")
+                    .setFooter(today,"https://images.alphacoders.com/100/1006618.jpg")
+                    .setColor("#FF94FE")
+                    message.reply(syntax_embed)
+                    return
                 }
 
                 callback(message,args,args.join(' '))
@@ -102,5 +119,5 @@ module.exports = (bot,argoptions) => {
         }
     });
 
-    checkpermision(Permissions);
+    checkpermision(permissions);
 }
