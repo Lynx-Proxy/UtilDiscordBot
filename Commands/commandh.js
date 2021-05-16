@@ -1,109 +1,106 @@
-const { prefix } = require('../Config.json')
+const { prefix } = require("../Config.json");
 
-const checkperms = (perms) => {     //function to check permissions
-    for (const permission of perms) {
-        if (!AllPerms.includes(permission)) {
-          throw new Error(`Invaliad permission "${permission}"`)
+const checkpermision = (permissions) => {
+    const validPermissions = [
+      'CREATE_INSTANT_INVITE',
+      'KICK_MEMBERS',
+      'BAN_MEMBERS',
+      'ADMINISTRATOR',
+      'MANAGE_CHANNELS',
+      'MANAGE_GUILD',
+      'ADD_REACTIONS',
+      'VIEW_AUDIT_LOG',
+      'PRIORITY_SPEAKER',
+      'STREAM',
+      'VIEW_CHANNEL',
+      'SEND_MESSAGES',
+      'SEND_TTS_MESSAGES',
+      'MANAGE_MESSAGES',
+      'EMBED_LINKS',
+      'ATTACH_FILES',
+      'READ_MESSAGE_HISTORY',
+      'MENTION_EVERYONE',
+      'USE_EXTERNAL_EMOJIS',
+      'VIEW_GUILD_INSIGHTS',
+      'CONNECT',
+      'SPEAK',
+      'MUTE_MEMBERS',
+      'DEAFEN_MEMBERS',
+      'MOVE_MEMBERS',
+      'USE_VAD',
+      'CHANGE_NICKNAME',
+      'MANAGE_NICKNAMES',
+      'MANAGE_ROLES',
+      'MANAGE_WEBHOOKS',
+      'MANAGE_EMOJIS',
+    ]
+
+    for(const permission of permissions){
+        if(!validPermissions.includes(permission)){
+            throw new Error(`Permission not found ${permission}`);
         }
     }
 }
 
-const AllPerms = [  //Maybe there are more permissions
-    'CREATE_INSTANT_INVITE',
-    'KICK_MEMBERS',
-    'BAN_MEMBERS',
-    'ADMINISTRATOR',
-    'MANAGE_CHANNELS',
-    'MANAGE_GUILD',
-    'ADD_REACTIONS',
-    'VIEW_AUDIT_LOG',
-    'PRIORITY_SPEAKER',
-    'STREAM',
-    'VIEW_CHANNEL',
-    'SEND_MESSAGES',
-    'SEND_TTS_MESSAGES',
-    'MANAGE_MESSAGES',
-    'EMBED_LINKS',
-    'ATTACH_FILES',
-    'READ_MESSAGE_HISTORY',
-    'MENTION_EVERYONE',
-    'USE_EXTERNAL_EMOJIS',
-    'VIEW_GUILD_INSIGHTS',
-    'CONNECT',
-    'SPEAK',
-    'MUTE_MEMBERS',
-    'DEAFEN_MEMBERS',
-    'MOVE_MEMBERS',
-    'USE_VAD',
-    'CHANGE_NICKNAME',
-    'MANAGE_NICKNAMES',
-    'MANAGE_ROLES',
-    'MANAGE_WEBHOOKS',
-    'MANAGE_EMOJIS',
-]
-
-module.exports = (bot,commandinfo) => {
+module.exports = (bot,argoptions) => {
     let {
         commands,
-        ExpectedArgs = '',
-        PermsError = 'You do not have the permission to run this command',
-        MinArgs = 0,
-        MaxArgs = null,
-        permissions = [],
+        ExpectedArguments ="",
+        PermissionError = 'You do not have permission to run this command',
+        MinArguments = 0, 
+        MaxArguments = null,
+        Permissions = [],
         RequiredRoles = [],
-        callback   
-    } = commandinfo
+        callback
+    } = argoptions
 
     if(typeof commands === 'string'){
-        commands = [commands]  //converts command into array (for ailiases)
+        commands = [commands];
     }
 
-    if(permissions.length){
-        if(typeof permissions === 'string'){
-            permissions = [permissions] //converts to array for multiple perms
+    console.log(`Loading command:${commands[0]}`)
 
-            checkperms(permissions) //Checks if permission is valid
+    if(Permissions.length){
+        if(typeof Permission === 'string'){
+            Permissions = [Permissions];
         }
     }
 
     bot.on('message',(message) => {
-        if(message.channel.type = 'dm') return
-        
-        const { content,member,guild } = message //gets the content,member,guild attribute from message
+        const { member, content, guild } = message;
 
         for(const alias of commands){
-
             if(content.toLowerCase().startsWith(`${prefix}${alias.toLowerCase()}`)){
-                
-                for(const perms of permissions){
-                    if(!member.hasPermission(perms)){  //Makes sure user has required permissions
-                        message.reply(PermsError)
-                        return
+                for(const perms of Permissions){
+                    if(!member.hasPermission(perms)){
+                        message.reply(PermissionError);
+                        return;
                     }
                 }
                 
-                for(const requiredroles of RequiredRoles){  //Makes sure user has required roles
-                    const role = guild.roles.cache.find((rol) => {
-                        role.name == requiredroles
-                    })
+                for(const reqrole of RequiredRoles){
+                    const role = guild.roles.cache.find((role) => role.name === reqrole)
 
                     if(!role || member.roles.cache.has(role.id)){
-                        message.reply(`You must have the ${requiredroles} to run this command`)
-                        return
+                        message.reply(`you must have ${reqrole} role to use this commnd`)
+                        return;
                     }
                 }
 
-                const arguments = content.split(/[ ]+/) //splits command into array
-                arguments.shift()
+                const args = content.split(/[ ]+/)
 
-                if(arguments.length < MinArgs || (MaxArgs !== null && arguments.length > MaxArgs)){  //checks if the are to mmany arguments or to little arguments
-                    message.reply(`Wrong syntax, Use ${prefix}${alias}${ExpectedArgs}`)
+                args.shift();
+
+                if(args.length < MinArguments || MaxArguments !== null && args.length > MaxArguments){
+                    message.reply(`incorrect synatx use:${prefix}${alias}`)
                 }
 
-                callback(message,arguments,arguments.join(' '))
+                callback(message,args,args.join(' '))
 
-                return 
+                return;
             }
         }
-    })
+    });
+
+    checkpermision(Permissions);
 }
