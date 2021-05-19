@@ -115,7 +115,7 @@ module.exports = (bot,argoptions) => {
                     return
                 }
 
-                callback(message,args,args.join(' '))
+                callback(message,args,args.join(' '),bot)
 
                 return;
             }
