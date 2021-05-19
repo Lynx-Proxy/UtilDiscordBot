@@ -77,6 +77,8 @@ module.exports = (bot,argoptions) => {
     bot.on('message',(message) => {
         const { member, content, guild } = message;
 
+        if(message.channel == 'dm') return;
+
         for(const alias of commands){
             if(content.toLowerCase().startsWith(`${prefix}${alias.toLowerCase()}`)){
                 for(const perms of permissions){
@@ -101,7 +103,8 @@ module.exports = (bot,argoptions) => {
                 const args = content.split(/[ ]+/)
 
                 args.shift();
-
+                console.log(args.length)
+                console.log(args)
                 if(args.length < MinArguments || MaxArguments !== null && args.length > MaxArguments){
                     var syntax_embed = new MessageEmbed()
                     .setTitle("Incorrect Syntax")
