@@ -38,7 +38,7 @@ module.exports = {
             .setColor("BLUE")
             .setFooter(today,"https://images.alphacoders.com/100/1006618.jpg")
             try {
-                //target.kick()
+                target.kick()
                 bot.channels.cache.get('824534435914973225').send(kicked)                
             } catch (error) {
                 console.log(error)
