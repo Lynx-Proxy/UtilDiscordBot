@@ -1,4 +1,4 @@
-const { prefix } = require("../Config.json");
+const { prefix } = require("../Config.json")
 const { MessageEmbed } = require("discord.js")
 
 const checkpermision = (permissionsss) => {
@@ -91,7 +91,8 @@ module.exports = (bot,argoptions) => {
                 for(const reqrole of RequiredRoles){
                     const role = guild.roles.cache.find((role) => role.name === reqrole)
 
-                    if(!role || member.roles.cache.has(role.id)){
+
+                    if(!role || !member.roles.cache.has(role.id)){
                         var role_embed = new MessageEmbed()
                         .setTitle(`You need ${reqrole}`)
                         .setColor("#FF3C38")
@@ -108,7 +109,7 @@ module.exports = (bot,argoptions) => {
                 if(args.length < MinArguments || MaxArguments !== null && args.length > MaxArguments){
                     var syntax_embed = new MessageEmbed()
                     .setTitle("Incorrect Syntax")
-                    .setDescription("Use:\n`" + prefix + alias + ExpectedArguments + "`")
+                    .setDescription("Use:\n`" + prefix + alias + " " + ExpectedArguments + "`")
                     .setFooter(today,"https://images.alphacoders.com/100/1006618.jpg")
                     .setColor("#FF94FE")
                     message.reply(syntax_embed)
