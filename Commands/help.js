@@ -1,13 +1,14 @@
 const { MessageEmbed } = require("discord.js")
 
+
 module.exports = {
     commands: 'help',
     ExpectedArguments: ' <help , category>',
     PermissionError: 'You need admin permissions to run this command',
     MinArguments: 0,
     MaxArguments: 1,
-    callback: (message, arguments, text) => {
-      if(arguments[0] == 'Admin'.toLowerCase()){
+    callback: (message, arguments, text,bot) => {
+      if(arguments[0] == 'admin'){
         var help_embed = new MessageEmbed()
         .setTitle("HELP")
         .setColor("BLUE")
@@ -28,7 +29,19 @@ module.exports = {
           })
         message.channel.send(help_embed)
       }
-      else{
+      else if(arguments[0] == 'member'){
+        var help_embed_Members = new MessageEmbed()
+        .setTitle("HELP")
+        .setColor("BLUE")
+        .addFields({
+            name:"Suggest",
+            value:"Suggest a command (I am not creative lol)",
+            inline:false
+          },
+          )
+        message.channel.send(help_embed_Members)
+      }
+      else if(arguments[0] = undefined){
         var help_embed = new MessageEmbed()
         .setTitle("HELP")
         .setColor("BLUE")
