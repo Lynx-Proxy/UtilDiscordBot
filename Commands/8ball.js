@@ -8,10 +8,15 @@ module.exports = {
     commands : ['8ball','8r'],
     ExpectedArguments: '<Question>',
     callback:(message,arguments,text,bot) => {
-        var ball = new MessageEmbed()
-        .setTitle("8ball")
-        .setDescription("```lua\nQuestion: " + text + "\nAnswer: " + answers[reply] + "```")
-        .setColor("RANDOM")
+        if(text != null){
+            var ball = new MessageEmbed()
+            .setTitle("8ball")
+            .setDescription("```\nQuestion: " + text + "\nAnswer: " + answers[reply] + "```")
+            .setColor("RANDOM")
+        }
+        else{
+            message.reply("question cannot be null")
+        }
 
         message.channel.send(ball)
     },
