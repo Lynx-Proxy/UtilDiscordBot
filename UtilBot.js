@@ -3,7 +3,6 @@ const fs = require('fs')
 const discord = require('discord.js')
 const bot  = new discord.Client()
 const config = require('./Config.json')
-const { brotliCompress } = require('zlib')
 
 bot.on('ready', async () => {
     console.log(`Bot ready as ${bot.user.username}`)
@@ -27,16 +26,6 @@ bot.on('ready', async () => {
     }
 
     readcmds('Commands')
-})
-
-bot.on('guildMemberAdd',(member) => {
-    bot.channels.cache.get('813785742538047539').then((channel) => {
-        member.displayAvatarURL()
-        var em = new discord.MessageEmbed()
-        .setTitle(`Welcome to ${member.guild.name} please Read ${member.guild.channels.cache.get(813787210703699968).toString()}`)
-        .setImage(member.displayAvatarURL())
-        channel.send(em)
-    })
 })
 
 bot.login(config.token)
