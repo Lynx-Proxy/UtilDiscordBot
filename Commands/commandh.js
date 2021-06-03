@@ -54,7 +54,7 @@ module.exports = (bot,argoptions) => {
     let {
         commands,
         ExpectedArguments ="",
-        PermissionError = 'You do not have permission to run this command',
+        _PermissionError = 'You do not have permission to run this command',
         MinArguments = 0, 
         MaxArguments = null,
         permissions = [],
@@ -83,7 +83,7 @@ module.exports = (bot,argoptions) => {
             if(content.toLowerCase().startsWith(`${prefix}${alias.toLowerCase()}`)){
                 for(const perms of permissions){
                     if(!member.hasPermission(perms)){
-                        message.reply(PermissionError);
+                        message.reply(_PermissionError);
                         return;
                     }
                 }
