@@ -12,7 +12,7 @@ module.exports = {
         let shifted = arguments.join(" ")
         let index = Math.floor(Math.random() * coinsides.lenght)
         if(!activated){
-            if(arguments[0] != 'heads'){
+            if(arguments[0] != 'heads' || 'tails'){
                 console.log(arguments[0])
                 message.reply("you must use a proper coin side name like heads or tails")
             }
